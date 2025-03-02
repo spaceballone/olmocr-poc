@@ -6,6 +6,8 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from PyPDF2 import PdfReader
 from PIL import Image
+import torch
+
 
 # Import olmOCR utilities and model classes
 from olmocr.data.renderpdf import render_pdf_to_base64png
@@ -21,7 +23,7 @@ MODEL_DIR = "/home/ubuntu/models/olmOCR-7B-0225-preview"
 PROCESSOR_NAME = "/home/ubuntu/models/Qwen2VL-7B-Instruct"  # or "Qwen/Qwen2-VL-7B-Instruct" if internet is available for cache
 
 print("Loading model... This may take a few minutes.")
-model = Qwen2VLForConditionalGeneration.from_pretrained(MODEL_DIR, torch_dtype="auto")  # use BF16/FP16 if available
+model = Qwen2VLForConditionalGeneration.from_pretrained(MODEL_DIR, torch.float16)  # use BF16/FP16 if available
 model.eval()
 processor = AutoProcessor.from_pretrained(PROCESSOR_NAME)
 device = "cuda"
